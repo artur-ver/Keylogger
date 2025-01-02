@@ -1,0 +1,24 @@
+# Keylogger with Telegram Integration
+
+This project captures and logs keyboard input, then sends the recorded data to a Telegram bot. It also detects the language of the typed text and sends updates about the program's status and the detected language to a specified Telegram chat.
+
+## Features
+
+- Logs all keypresses including special keys (Enter, Tab, Shift, etc.)
+- Sends the logged keypresses to a Telegram bot.
+- Detects the language of the typed text using the `langdetect` library.
+- Saves the typed data in a `keyfile.txt` file.
+- Supports running as both a Python script and a compiled EXE (via PyInstaller).
+
+## Requirements
+
+- Python 3.x
+- Telegram bot and chat ID
+- `.env` file for storing sensitive data
+
+### Python Libraries
+
+To run this project, install the necessary Python libraries using `pip`:
+
+```bash
+pip install telebot pynput langdetect python-dotenv
